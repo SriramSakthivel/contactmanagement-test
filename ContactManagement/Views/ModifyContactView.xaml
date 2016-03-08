@@ -1,0 +1,112 @@
+﻿<Window x:Class="ContactManagement.Views.ModifyContactView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:converters="clr-namespace:ContactManagement.Converters"
+             xmlns:vm="clr-namespace:ContactManagement.ViewModels"
+             xmlns:views="clr-namespace:ContactManagement.Views"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             mc:Ignorable="d" 
+        WindowStartupLocation="CenterOwner"
+        d:DesignHeight="294" d:DesignWidth="504"
+        Height="300" MinHeight="300"
+        Width="350" MinWidth="350"
+        Title="{Binding EditType, Converter={StaticResource EditTypeConverter}}"
+        FocusManager.FocusedElement="{Binding ElementName=FirstNameTextBox}"
+        views:DialogCloser.DialogResult="{Binding DialogResult}">
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="4" />
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" 
+                            Value="{Binding RelativeSource={RelativeSource Self},
+                        Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="Margin" Value="4" />
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" 
+                            Value="{Binding RelativeSource={RelativeSource Self},
+                        Path=(Validation.Errors)[0].ErrorContent}"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="StackPanel">
+            <Setter Property="Orientation" Value="Vertical"></Setter>
+            <Setter Property="Margin"  Value="2" />
+        </Style>
+        <Style x:Key="PromptSyle" TargetType="TextBlock">
+            <Setter Property="Margin"  Value="5"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+        <!--<Style x:Key="EditorStyle" TargetType="Control">
+            <Setter Property="Margin"  Value="5" />
+        </Style>-->
+    </Window.Resources>
+    <Grid Margin="6">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="247*"/>
+            <ColumnDefinition Width="257*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Grid.Column="0">
+            <TextBlock Text="First name" Style="{StaticResource PromptSyle}"></TextBlock>
+            <TextBox x:Name="FirstNameTextBox" Text="{Binding FirstName, ValidatesOnDataErrors=True,
+                UpdateSourceTrigger=PropertyChanged, NotifyOnValidationError=True}"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="0" Grid.Column="1">
+            <TextBlock Text="Last name" Style="{StaticResource PromptSyle}"></TextBlock>
+            <TextBox x:Name="LastNameTextBox" Text="{Binding LastName, UpdateSourceTrigger=PropertyChanged,
+                ValidatesOnDataErrors=True}"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="0">
+            <TextBlock Text="Gender" Style="{StaticResource PromptSyle}"></TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <RadioButton Content="Male" GroupName="Gender" 
+                             IsChecked="{Binding Path=Gender, Mode=TwoWay, 
+                                Converter={StaticResource EnumConverter},
+                                ConverterParameter=Male}"
+                             FontSize="16"/>
+                <RadioButton Content="Female" GroupName="Gender"
+                             IsChecked="{Binding Path=Gender, Mode=TwoWay,
+                                Converter={StaticResource EnumConverter},
+                                ConverterParameter=Female}"
+                             FontSize="16"
+                             Margin="5,0,0,0"/>
+            </StackPanel>
+        </StackPanel>
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <TextBlock Text="Date of birth" Style="{StaticResource PromptSyle}"></TextBlock>
+            <DatePicker DisplayDateEnd="{x:Static system:DateTime.Today}"
+                        SelectedDate="{Binding DateOfBirth, UpdateSourceTrigger=PropertyChanged,
+                 ValidatesOnDataErrors=True}" ></DatePicker>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="0">
+            <TextBlock Text="Phone" Style="{StaticResource PromptSyle}"></TextBlock>
+            <TextBox Text="{Binding Phone, ValidatesOnDataErrors=True,
+                UpdateSourceTrigger=PropertyChanged}"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Grid.Column="1">
+            <TextBlock Text="Country" Style="{StaticResource PromptSyle}"></TextBlock>
+            <TextBox Text="{Binding Country}"></TextBox>
+        </StackPanel>
+        <StackPanel Grid.Row="4" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Save" FontSize="16" Width="75" Margin="2"
+                    Command="{Binding SaveCommand}"></Button>
+            <Button Content="Cancel" FontSize="16" Width="75"  Margin="2,2,6,2"
+                    IsCancel="True"
+                    ></Button>
+        </StackPanel>
+    </Grid>
+</Window>

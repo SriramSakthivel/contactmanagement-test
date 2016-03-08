@@ -1,0 +1,65 @@
+﻿<Window x:Class="ContactManagement.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:ContactManagement.Views"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+        Title="Contacts Management"
+        Height="350" Width="525"
+        DataContext="{Binding Main, Source={StaticResource Locator}}" >
+    <i:Interaction.Triggers>
+        <i:EventTrigger EventName="Loaded">
+            <i:InvokeCommandAction Command="{Binding LoadSavedContactsCommand}"/>
+        </i:EventTrigger>
+        <i:EventTrigger EventName="Closing">
+            <i:InvokeCommandAction Command="{Binding SaveStateCommand}"/>
+        </i:EventTrigger>
+    </i:Interaction.Triggers>
+    <Grid
+        Margin="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Margin="2" Text="Available Contacts:" FontSize="16"/>
+        <ListBox Name= "ContactsListBox" Grid.Row="1"
+            Margin="2"
+            ItemsSource="{Binding Contacts}"
+            SelectedItem="{Binding SelectedContact}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <i:InvokeCommandAction Command="{Binding  EditContactCommand}" 
+                                           CommandParameter="{Binding SelectedItem, ElementName=ContactsListBox}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock
+                        Text="{Binding FirstName}"
+                        FontSize="16" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+            <ListBox.InputBindings>
+                <KeyBinding Key="Delete" Command="{Binding Path=DeleteContactCommand}"
+                            CommandParameter="{Binding SelectedItem, ElementName=ContactsListBox}"></KeyBinding>
+            </ListBox.InputBindings>
+        </ListBox>
+        <StackPanel Grid.Row="2" Orientation="Vertical">
+            <TextBlock Text="Note: Select a contact and press delete to remove." VerticalAlignment="Center"></TextBlock>
+            <TextBlock Margin="2" 
+                   Text="Click here to add new contact -->"
+                   Visibility="{Binding Contacts.Count, Converter={StaticResource NumberToVisiblityConverter}}"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2"  Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="New Contact"
+                Margin="6"
+                FontSize="16"
+                Width="100"
+                HorizontalAlignment="Right"
+                Command="{Binding NewContactCommand}" />
+        </StackPanel>
+    </Grid>
+</Window>

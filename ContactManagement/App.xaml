@@ -1,0 +1,14 @@
+﻿<Application x:Class="ContactManagement.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:viewModels="clr-namespace:ContactManagement.ViewModels"
+             xmlns:converters="clr-namespace:ContactManagement.Converters"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <viewModels:ViewModelLocator x:Key="Locator"/>
+        <converters:EnumMatchToBooleanConverter x:Key="EnumConverter" />
+        <converters:EditTypeToStringConverter x:Key="EditTypeConverter"></converters:EditTypeToStringConverter>
+        <converters:NumberToVisiblityConverter x:Key="NumberToVisiblityConverter"></converters:NumberToVisiblityConverter>
+        <converters:DateConverter x:Key="DateConverter"></converters:DateConverter>
+    </Application.Resources>
+</Application>
